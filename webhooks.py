@@ -102,11 +102,18 @@ def index():
 
     # Gather data
     try:
-        payload = request.get_json()
-    except Exception:
-        logging.warning('Request parsing failed')
+        if request.data:
+            # if i have data, assume it is json
+            payload = request.get_json(force=True, silent=False)
+        elif request.form:
+            # if i have a form, use the first one as the webhook data
+            payload = request.form.to_dict(flat=True)
+        else:
+            raise Exception("Unknown data type for webhook")
+    except Exception as e:
+        logging.warning('Request parsing failed %s', e, exc_info=True)
         abort(400)
-
+   
     # Determining the branch is tricky, as it only appears for certain event
     # types an at different levels
     branch = None
@@ -203,4 +210,4 @@ def index():
 
 
 if __name__ == '__main__':
-    application.run(debug=True, host='0.0.0.0')
+    application.run(debug=True, host='0.0.0.0', port=8182)
