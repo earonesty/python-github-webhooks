@@ -206,7 +206,7 @@ def index():
 
     output = dumps(ran, sort_keys=True, indent=4)
     logging.info(output)
-    return output
+    return (output, {'Content-Type': 'application/json'})
 
 
 if __name__ == '__main__':
