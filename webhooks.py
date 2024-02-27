@@ -70,11 +70,9 @@ def index():
             abort(403)
 
     # Enforce secret
-    secret = config.get('enforce_secret', '')
-    if secret:
+    if secret := config.get('enforce_secret', ''):
         # Only SHA1 is supported
-        header_signature = request.headers.get('X-Hub-Signature')
-        if header_signature is None:
+        if (header_signature := request.headers.get('X-Hub-Signature')) is None:
             abort(403)
 
         sha_name, signature = header_signature.split('=')
@@ -96,8 +94,7 @@ def index():
                 abort(403)
 
     # Implement ping
-    event = request.headers.get('X-GitHub-Event', 'ping')
-    if event == 'ping':
+    if (event := request.headers.get('X-GitHub-Event', 'ping')) == 'ping':
         return dumps({'msg': 'pong'})
 
     # Gather data
