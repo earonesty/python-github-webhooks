@@ -58,7 +58,7 @@ def index():
         src_ip = ip_address(
             u'{}'.format(request.access_route[0])  # Fix stupid ipaddress issue
         )
-        whitelist = requests.get('https://api.github.com/meta').json()['hooks']
+        whitelist = requests.get('https://api.github.com/meta', timeout=60).json()['hooks']
 
         for valid_ip in whitelist:
             if src_ip in ip_network(valid_ip):
