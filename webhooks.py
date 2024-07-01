@@ -17,6 +17,8 @@
 
 import logging
 from sys import stderr, hexversion
+from security import safe_command
+
 logging.basicConfig(stream=stderr)
 
 import hmac
@@ -179,8 +181,7 @@ def index():
     ran = {}
     for s in scripts:
 
-        proc = Popen(
-            [s, tmpfile, event],
+        proc = safe_command.run(Popen, [s, tmpfile, event],
             stdout=PIPE, stderr=PIPE
         )
         stdout, stderr = proc.communicate()
