@@ -202,7 +202,7 @@ def index():
 
     info = config.get('return_scripts_info', False)
     if not info:
-        return dumps({'status': 'done'})
+        return (dumps({'status': 'done'}), {'Content-Type': 'application/json'})
 
     output = dumps(ran, sort_keys=True, indent=4)
     logging.info(output)
